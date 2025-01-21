@@ -1,8 +1,8 @@
 package com.cashin.nest.demo.NestService;
 
 
-import static com.cashin.nest.demo.NestService.NestBluetoothService.STATE_CONNECTED;
-import static com.cashin.nest.demo.NestService.NestBluetoothService.STATE_NONE;
+import static com.cashin.nest.demo.NestService.NestService.STATE_CONNECTED;
+import static com.cashin.nest.demo.NestService.NestService.STATE_NONE;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -43,7 +43,7 @@ public class NestPurchaseBluetoothService {
             UUID.fromString("3b1c62ee-55b4-4f4b-808c-4e55cd2d583e");
     // Member fields
     private final BluetoothAdapter mAdapter;
-    NestBluetoothService.UseCaseCallback<Throwable, String, String> callback;
+    NestService.UseCaseCallback<Throwable, String, String> callback;
     private AcceptThread mSecureAcceptThread;
     private AcceptThread mInsecureAcceptThread;
     private ConnectThread mConnectThread;
@@ -94,9 +94,8 @@ public class NestPurchaseBluetoothService {
         }
         return true;
     });
-    boolean androidS = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S;
 
-    public NestPurchaseBluetoothService(NestBluetoothService.UseCaseCallback<Throwable, String, String> callback) {
+    public NestPurchaseBluetoothService(NestService.UseCaseCallback<Throwable, String, String> callback) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         this.callback = callback;
@@ -303,17 +302,13 @@ public class NestPurchaseBluetoothService {
         purchaseRequest.setCustomerPhone(phone);
         purchaseRequest.setCustomerName(name);
         purchaseRequest.setCustomerReferenceNumber(uuid);
-        purchaseRequest.setAmount((long) round(amountToPay * 100, 2));
+        purchaseRequest.setAmount((long) Helper.round(amountToPay * 100, 2));
         purchaseRequest.setPaymentMethod(nestPaymentType);
 
         return launchNestPurchaseAction(PurchaseActions.Payment.getType(), purchaseRequest);
     }
 
-    public static double round(double d, int decimalPlace) {
-        BigDecimal bd = new BigDecimal(Double.toString(d));
-        bd = bd.setScale(decimalPlace, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
+
 
     private boolean launchNestPurchaseAction(int actionType, PurchaseRequest purchaseRequest) {
         try {

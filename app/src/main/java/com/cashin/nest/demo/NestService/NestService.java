@@ -7,9 +7,9 @@ import androidx.activity.result.ActivityResultLauncher;
 
 import timber.log.Timber;
 
-public class NestBluetoothService {
+public class NestService {
 
-    public static NestBluetoothService instance;
+    public static NestService instance;
     public static final int STATE_NONE = 0;
     public static final int STATE_CONNECTED = 3;
 
@@ -39,14 +39,14 @@ public class NestBluetoothService {
 
     private NestPurchaseResponseHelper.NestPurchaseResponseHandlerCallBack purchaseCallBack;
 
-    private NestBluetoothService(BluetoothDevice bluetoothDevice) {
+    private NestService(BluetoothDevice bluetoothDevice) {
         this.bluetoothDevice = bluetoothDevice;
         this.bluetoothService = new NestPurchaseBluetoothService(callback);
     }
 
-    public static NestBluetoothService getInstance(BluetoothDevice bluetoothDevice, NestPurchaseResponseHelper.NestPurchaseResponseHandlerCallBack purchaseCallBack) {
+    public static NestService getInstance(BluetoothDevice bluetoothDevice, NestPurchaseResponseHelper.NestPurchaseResponseHandlerCallBack purchaseCallBack) {
         if (instance == null) {
-            instance = new NestBluetoothService(bluetoothDevice);
+            instance = new NestService(bluetoothDevice);
         }
         instance.purchaseCallBack = purchaseCallBack;
         return instance;

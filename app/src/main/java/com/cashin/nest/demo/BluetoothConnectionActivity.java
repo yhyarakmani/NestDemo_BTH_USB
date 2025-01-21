@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cashin.nest.demo.NestService.NestBluetoothService;
+import com.cashin.nest.demo.NestService.NestService;
 import com.cashin.nest.demo.NestService.NestPurchaseResponseHelper;
 import com.cashin.nest.demo.enums.PurchasePaymentMethod;
 import com.cashin.nest.demo.models.responses.PurchaseResponse;
@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import java.util.UUID;
 
 public class BluetoothConnectionActivity extends AppCompatActivity {
-    private NestBluetoothService bluetoothService;
+    private NestService bluetoothService;
     private BluetoothDevice device;
 
     private TextView textViewStatus;
@@ -37,7 +37,7 @@ public class BluetoothConnectionActivity extends AppCompatActivity {
         textViewStatus = findViewById(R.id.textViewStatus);
         buttonSendData = findViewById(R.id.buttonSendData);
 
-        bluetoothService = NestBluetoothService.getInstance(device, new NestPurchaseResponseHelper.NestPurchaseResponseHandlerCallBack() {
+        bluetoothService = NestService.getInstance(device, new NestPurchaseResponseHelper.NestPurchaseResponseHandlerCallBack() {
             @Override
             public void onSuccess(PurchaseResponse purchaseResponse) {
                 Toast.makeText(BluetoothConnectionActivity.this, purchaseResponse.getMessage(), Toast.LENGTH_SHORT).show();
