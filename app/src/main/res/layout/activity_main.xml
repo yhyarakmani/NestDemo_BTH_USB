@@ -1,0 +1,32 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/buttonEnableBluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enable Bluetooth" />
+
+    <Button
+        android:id="@+id/requestBluetoothPermissions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Request Bluetooth Permissions" />
+
+    <Button
+        android:id="@+id/buttonRefreshDevices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Refresh Paired Devices" />
+
+    <ListView
+        android:id="@+id/listViewDevices"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
+</LinearLayout>
