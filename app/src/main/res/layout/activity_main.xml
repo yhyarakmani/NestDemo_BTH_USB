@@ -6,12 +6,6 @@
     android:padding="16dp">
 
     <Button
-        android:id="@+id/buttonEnableBluetooth"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enable Bluetooth" />
-
-    <Button
         android:id="@+id/requestBluetoothPermissions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

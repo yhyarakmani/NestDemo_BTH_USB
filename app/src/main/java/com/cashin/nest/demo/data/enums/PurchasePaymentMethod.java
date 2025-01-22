@@ -1,4 +1,4 @@
-package com.cashin.nest.demo.enums;
+package com.cashin.nest.demo.data.enums;
 
 public enum PurchasePaymentMethod {
     None(0),

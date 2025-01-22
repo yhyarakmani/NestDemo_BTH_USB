@@ -1,4 +1,4 @@
-package com.cashin.nest.demo.models;
+package com.cashin.nest.demo.data.models;
 
 import java.util.List;
 

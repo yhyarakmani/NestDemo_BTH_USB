@@ -20,7 +20,7 @@
         android:theme="@style/Theme.NestDemo"
         tools:targetApi="31">
         <activity
-            android:name=".BluetoothConnectionActivity"
+            android:name=".ConnectionActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

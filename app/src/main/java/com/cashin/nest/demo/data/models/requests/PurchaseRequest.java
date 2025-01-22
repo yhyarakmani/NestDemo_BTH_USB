@@ -1,4 +1,6 @@
-package com.cashin.nest.demo.models.requests;
+package com.cashin.nest.demo.data.models.requests;
+
+import com.cashin.nest.demo.utils.AppHelper;
 
 public class PurchaseRequest {
     public int action;
@@ -12,6 +14,20 @@ public class PurchaseRequest {
     public String customerPhone;
     public String customerName;
     public String customerEmail;
+
+    public PurchaseRequest(int action,
+                           String uuid,
+                           String phone,
+                           String name,
+                           double amountToPay,
+                           int nestPaymentType) {
+        this.action = action;
+        this.customerReferenceNumber = uuid;
+        this.customerPhone = phone.contains("966") ? phone.substring(3) :phone;
+        this.customerName = name;
+        this.amount = (long) AppHelper.round(amountToPay*100,2);
+        this.paymentMethod = nestPaymentType;
+    }
 
     public int getAction() {
         return action;

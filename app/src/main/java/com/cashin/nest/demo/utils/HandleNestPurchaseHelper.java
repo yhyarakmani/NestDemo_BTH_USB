@@ -1,20 +1,18 @@
-package com.cashin.nest.demo.NestService;
+package com.cashin.nest.demo.utils;
 
-
-import android.content.Context;
 
 import com.cashin.nest.demo.NestConstants;
-import com.cashin.nest.demo.enums.PurchaseActions;
-import com.cashin.nest.demo.enums.PurchaseErrorCode;
-import com.cashin.nest.demo.models.responses.PurchaseResponse;
-import com.cashin.nest.demo.models.responses.PurchaseResponseCheckVersion;
-import com.cashin.nest.demo.models.responses.PurchaseResponsePaymentMethods;
-import com.cashin.nest.demo.models.responses.PurchaseResponseTransaction;
+import com.cashin.nest.demo.data.enums.PurchaseActions;
+import com.cashin.nest.demo.data.enums.PurchaseErrorCode;
+import com.cashin.nest.demo.data.models.responses.PurchaseResponse;
+import com.cashin.nest.demo.data.models.responses.PurchaseResponseCheckVersion;
+import com.cashin.nest.demo.data.models.responses.PurchaseResponsePaymentMethods;
+import com.cashin.nest.demo.data.models.responses.PurchaseResponseTransaction;
 import com.google.gson.Gson;
 
 import timber.log.Timber;
 
-public class NestPurchaseResponseHelper {
+public class HandleNestPurchaseHelper {
     public static void handleResponse(String response, NestPurchaseResponseHandlerCallBack callBack) {
         Timber.d("response from nest: %s", response);
         try {

@@ -1,6 +1,4 @@
-package com.cashin.nest.demo.NestService;
-
-import static com.cashin.nest.demo.NestService.NestPurchaseUSBService.USB_TIMEOUT_IN_MS;
+package com.cashin.nest.demo.utils;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,26 +7,23 @@ import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
 
+import com.cashin.nest.demo.data.constants.CommunicationConstants;
+
 import java.util.HashMap;
 
 public class USBConnectHelper {
     private UsbManager usbManager;
-    private Context context;
     private UsbDevice device;
-    private NestPurchaseUSBService service;
-    public void connect(Context context,NestPurchaseUSBService service) {
-        this.usbManager = (UsbManager) context.getSystemService(Context.USB_SERVICE);
-        this.context = context;
-        this.service = service;
-        if (service.isConnected) {
-            return;
-        }
+    private UsbDeviceConnection connection;
+
+    public void connect(UsbManager usbManager,Context context) {
+        this.usbManager = usbManager;
         final HashMap<String, UsbDevice> deviceList = usbManager.getDeviceList();
         if (deviceList == null || deviceList.isEmpty()) {
             return;
         }
         for (UsbDevice device : deviceList.values()) {
-            initAccessory(device);
+            initAccessory(device,context);
         }
         searchForUsbAccessory(deviceList);
     }
@@ -38,7 +33,6 @@ public class USBConnectHelper {
         for (UsbDevice device : deviceList.values()) {
             if (isUsbAccessory(device) && usbManager.hasPermission(device)) {
                 this.device = device;
-                service.startCommunicationRunnable(this.device,this.usbManager);
                 return;
             }
         }
@@ -48,16 +42,14 @@ public class USBConnectHelper {
         return (device.getProductId() == 0x2d00) || (device.getProductId() == 0x2d01);
     }
 
-    private void initAccessory(final UsbDevice device) {
-        //if (!usbManager.hasPermission(device)) {
+    private void initAccessory(final UsbDevice device,Context context) {
         Intent intent = new Intent(context, this.getClass());
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, 1, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT
                         | PendingIntent.FLAG_IMMUTABLE);
         usbManager.requestPermission(device, pendingIntent);
-        //}
-        final UsbDeviceConnection connection = usbManager.openDevice(device);
+        connection = usbManager.openDevice(device);
         if (connection == null) {
             return;
         }
@@ -75,7 +67,7 @@ public class USBConnectHelper {
                 "42"); // SERIAL
         connection.controlTransfer(0x40,
                 53, 0, 0, new byte[]{},
-                0, USB_TIMEOUT_IN_MS);
+                0, CommunicationConstants.USB_TIMEOUT_IN_MS);
         connection.close();
     }
 
@@ -83,6 +75,14 @@ public class USBConnectHelper {
                                            final int index,
                                            final String string) {
         deviceConnection.controlTransfer(0x40, 52, 0, index,
-                string.getBytes(), string.length(), USB_TIMEOUT_IN_MS);
+                string.getBytes(), string.length(), CommunicationConstants.USB_TIMEOUT_IN_MS);
+    }
+
+    public UsbDevice getDevice() {
+        return device;
+    }
+
+    public UsbDeviceConnection getConnection() {
+        return connection;
     }
 }

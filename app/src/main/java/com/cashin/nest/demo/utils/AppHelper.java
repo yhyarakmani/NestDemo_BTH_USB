@@ -1,9 +1,12 @@
-package com.cashin.nest.demo.NestService;
+package com.cashin.nest.demo.utils;
+
+import android.content.Context;
+import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class Helper {
+public class AppHelper {
     public static double round(double d, int decimalPlace) {
         BigDecimal bd = new BigDecimal(Double.toString(d));
         bd = bd.setScale(decimalPlace, RoundingMode.HALF_UP);
@@ -19,5 +22,9 @@ public class Helper {
             }
         }
         return unicodeString.toString();
+    }
+    public static void showToast(Context context,String message)
+    {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 }

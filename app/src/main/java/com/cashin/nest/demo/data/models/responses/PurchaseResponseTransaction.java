@@ -1,7 +1,7 @@
-package com.cashin.nest.demo.models.responses;
+package com.cashin.nest.demo.data.models.responses;
 
 
-import com.cashin.nest.demo.models.NestTransaction;
+import com.cashin.nest.demo.data.models.NestTransaction;
 
 public class PurchaseResponseTransaction extends PurchaseResponse{
     private NestTransaction transaction;

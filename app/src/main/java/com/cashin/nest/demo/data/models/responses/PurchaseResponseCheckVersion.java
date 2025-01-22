@@ -1,4 +1,4 @@
-package com.cashin.nest.demo.models.responses;
+package com.cashin.nest.demo.data.models.responses;
 
 public class PurchaseResponseCheckVersion extends PurchaseResponse{
     int versionCode;
