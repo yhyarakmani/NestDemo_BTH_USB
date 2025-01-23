@@ -4,10 +4,10 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cashin.nest.demo.data.constants.CommunicationConstants;
 import com.cashin.nest.demo.services.NestService.BluetoothCommunicationService;
 import com.cashin.nest.demo.services.NestService.NestService;
 import com.cashin.nest.demo.utils.AppHelper;
@@ -25,7 +25,7 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bluetooth_connection);
+        setContentView(R.layout.activity_connection);
         Button buttonSendData = findViewById(R.id.buttonSendData);
         textViewStatus = findViewById(R.id.textViewStatus);
         buttonSendData.setOnClickListener(v -> sendData());
@@ -38,8 +38,11 @@ public class ConnectionActivity extends AppCompatActivity {
         nestService = NestService.getInstance(new BluetoothCommunicationService(device), new HandleNestPurchaseHelper.NestPurchaseResponseHandlerCallBack() {
             @Override
             public void onSuccess(PurchaseResponse purchaseResponse) {
-                AppHelper.showToast(ConnectionActivity.this, purchaseResponse.getMessage());
-                runOnUiThread(() -> textViewStatus.setText(new Gson().toJson(purchaseResponse)));
+
+                runOnUiThread(() -> {
+                    textViewStatus.setText(new Gson().toJson(purchaseResponse));
+                    AppHelper.showToast(ConnectionActivity.this, purchaseResponse.getMessage());
+                });
 
             }
 
@@ -51,7 +54,15 @@ public class ConnectionActivity extends AppCompatActivity {
 
             @Override
             public void setStatus(int status) {
-                runOnUiThread(() -> AppHelper.showToast(ConnectionActivity.this, "Status: " + status));
+                runOnUiThread(() -> {
+                    if (status == CommunicationConstants.STATE_CONNECTED) {
+                        textViewStatus.setText("متصل");
+                        return;
+                    }
+                    if (status == CommunicationConstants.STATE_NONE) {
+                        textViewStatus.setText("غير متصل");
+                    }
+                });
             }
 
         });
@@ -59,8 +70,8 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void sendData() {
-       boolean res =  nestService.pay(UUID.randomUUID().toString(),"582582888","test",100.50, PurchasePaymentMethod.None.getType());
-       if(res)
-           textViewStatus.setText("Data sent successfully");
+        boolean res = nestService.pay(UUID.randomUUID().toString(), "582582888", "test", 100.50, PurchasePaymentMethod.None.getType());
+        if (res)
+            textViewStatus.setText("تم إرسال الطلب");
     }
 }

@@ -56,7 +56,7 @@ public class NestService {
     public boolean pay(String uuid, String phone, String name, double amountToPay, int nestPaymentType) {
         // Implement payment logic using communicationService
         try {
-            PurchaseRequest request = new PurchaseRequest(PurchaseActions.Payment.getType(),uuid, phone, name, amountToPay, nestPaymentType);
+            PurchaseRequest request = new PurchaseRequest(PurchaseActions.Payment.getType(),"com.cashin.nest.demo",uuid, phone, name, amountToPay, nestPaymentType);
             communicationService.send(new Gson().toJson(request));
             return true;
         }catch (Exception e){

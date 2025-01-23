@@ -58,6 +58,7 @@ public class BluetoothCommunicationService implements CommunicationService {
     @Override
     public void send(String data) {
         if (connectedThread != null) {
+            data = data + CommunicationConstants.END_OF_MESSAGE;
             connectedThread.write(data.getBytes());
         } else {
             Timber.e("Cannot send data: Not connected");
@@ -146,7 +147,7 @@ public class BluetoothCommunicationService implements CommunicationService {
         }
 
         public void run() {
-            Timber.d("BEGIN mAcceptThread %s", this);
+            Timber.e("BEGIN mAcceptThread");
             setName("AcceptThread");
             BluetoothSocket socket;
             // Listen to the server socket if we're not connected
@@ -192,7 +193,7 @@ public class BluetoothCommunicationService implements CommunicationService {
             BluetoothSocket tmp = null;
             // Get a BluetoothSocket for a connection with the given BluetoothDevice
             try {
-                tmp = device.createRfcommSocketToServiceRecord(CommunicationConstants.MY_UUID_SECURE);
+                tmp = mmDevice.createRfcommSocketToServiceRecord(CommunicationConstants.MY_UUID_SECURE);
             } catch (IOException e) {
                 Timber.e(e, "create() failed");
             }
@@ -200,7 +201,7 @@ public class BluetoothCommunicationService implements CommunicationService {
         }
 
         public void run() {
-            Timber.i("BEGIN mConnectThread");
+            Timber.e("BEGIN mConnectThread");
             setName("ConnectThread");
             // Cancel discovery because it otherwise slows down the connection
             bluetoothAdapter.cancelDiscovery();
@@ -246,7 +247,7 @@ public class BluetoothCommunicationService implements CommunicationService {
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
-            Timber.d("create ConnectedThread");
+            Timber.e("create ConnectedThread");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -323,10 +324,6 @@ public class BluetoothCommunicationService implements CommunicationService {
                     // Thread.sleep(10);  // Uncomment if you encounter issues with rapid sending
                 }
 
-                // Share the entire sent message back to the UI Activity
-                if (listener != null) {
-                    listener.onMessageReceived(new String(buffer));
-                }
             } catch (IOException e) {
                 Timber.e(e, "Exception during write");
             }

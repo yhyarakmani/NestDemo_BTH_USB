@@ -22,6 +22,8 @@ import com.cashin.nest.demo.utils.BluetoothConnectHelper;
 import java.util.ArrayList;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity {
     private BluetoothConnectHelper bluetoothHelper;
     // Register the ActivityResultLauncher for Bluetooth enable
@@ -41,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         // Initialize UI components
         ListView listViewDevices = findViewById(R.id.listViewDevices);
         Button buttonRefreshDevices = findViewById(R.id.buttonRefreshDevices);

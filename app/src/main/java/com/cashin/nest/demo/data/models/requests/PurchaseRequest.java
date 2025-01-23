@@ -16,12 +16,14 @@ public class PurchaseRequest {
     public String customerEmail;
 
     public PurchaseRequest(int action,
+                           String packageName,
                            String uuid,
                            String phone,
                            String name,
                            double amountToPay,
                            int nestPaymentType) {
         this.action = action;
+        this.packageName = packageName;
         this.customerReferenceNumber = uuid;
         this.customerPhone = phone.contains("966") ? phone.substring(3) :phone;
         this.customerName = name;
