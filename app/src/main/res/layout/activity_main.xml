@@ -6,6 +6,12 @@
     android:padding="16dp">
 
     <Button
+        android:id="@+id/initiateUSBDevice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Initiate USB Device" />
+
+    <Button
         android:id="@+id/requestBluetoothPermissions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -15,7 +15,13 @@ public class USBConnectHelper {
     private UsbManager usbManager;
     private UsbDevice device;
     private UsbDeviceConnection connection;
-
+    private static USBConnectHelper instance;
+    public static USBConnectHelper getInstance() {
+        if (instance == null) {
+            instance = new USBConnectHelper();
+        }
+        return instance;
+    }
     public void connect(UsbManager usbManager,Context context) {
         this.usbManager = usbManager;
         final HashMap<String, UsbDevice> deviceList = usbManager.getDeviceList();
@@ -84,5 +90,9 @@ public class USBConnectHelper {
 
     public UsbDeviceConnection getConnection() {
         return connection;
+    }
+
+    public UsbManager getUsbManager() {
+        return usbManager;
     }
 }

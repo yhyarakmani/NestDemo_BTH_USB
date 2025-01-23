@@ -1,26 +1,24 @@
 package com.cashin.nest.demo;
 
-import android.bluetooth.BluetoothAdapter;
+import android.app.ComponentCaller;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.cashin.nest.demo.utils.AppHelper;
 import com.cashin.nest.demo.utils.BluetoothConnectHelper;
-
-import java.util.ArrayList;
-import java.util.Set;
+import com.cashin.nest.demo.utils.USBConnectHelper;
 
 import timber.log.Timber;
 
@@ -37,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
     );
+    Button initiateUSBDevice;
+    Button buttonRefreshDevices;
+    Button requestBluetoothPermissions;
+    ListView listViewDevices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Initialize UI components
-        ListView listViewDevices = findViewById(R.id.listViewDevices);
-        Button buttonRefreshDevices = findViewById(R.id.buttonRefreshDevices);
-        Button requestBluetoothPermissions = findViewById(R.id.requestBluetoothPermissions);
+        listViewDevices = findViewById(R.id.listViewDevices);
+        initiateUSBDevice = findViewById(R.id.initiateUSBDevice);
+        buttonRefreshDevices = findViewById(R.id.buttonRefreshDevices);
+        requestBluetoothPermissions = findViewById(R.id.requestBluetoothPermissions);
 
         // Initialize Bluetooth helper with the launcher
         bluetoothHelper = new BluetoothConnectHelper(this, enableBluetoothLauncher);
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         listViewDevices.setAdapter(devicesAdapter);
 
         // Set button listeners
+        initiateUSBDevice.setOnClickListener(v -> connectToUsbDevice());
         requestBluetoothPermissions.setOnClickListener(v -> bluetoothHelper.requestBluetoothPermissions());
         buttonRefreshDevices.setOnClickListener(v -> {
             bluetoothHelper.listPairedDevices();
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         // Set item click listener for list view
         listViewDevices.setOnItemClickListener((parent, view, position, id) -> {
             BluetoothDevice selectedDevice = bluetoothHelper.getPairedDevicesList().get(position);
-            connectToDevice(selectedDevice);
+            connectToBluetoothDevice(selectedDevice);
         });
     }
 
@@ -81,10 +85,25 @@ public class MainActivity extends AppCompatActivity {
         bluetoothHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    private void connectToDevice(BluetoothDevice device) {
+    private void connectToBluetoothDevice(BluetoothDevice device) {
         Intent intent = new Intent(this, ConnectionActivity.class);
         intent.putExtra("BLUETOOTH_DEVICE", device);
         startActivity(intent);
+    }
+
+    private void connectToUsbDevice() {
+        if(USBConnectHelper.getInstance().getDevice()!=null){
+        Intent intent = new Intent(this, ConnectionActivity.class);
+        startActivity(intent);
+        }else
+            AppHelper.showToast(this, "No USB device attached");
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        USBConnectHelper.getInstance().connect((UsbManager) getSystemService(Context.USB_SERVICE), this);
     }
 
 }

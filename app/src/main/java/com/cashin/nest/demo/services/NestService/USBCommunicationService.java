@@ -65,6 +65,8 @@ public class USBCommunicationService implements CommunicationService {
         UsbEndpoint endpointIn = null;
         UsbEndpoint endpointOut = null;
 
+        if(device==null || device.getInterfaceCount()==0)
+            return;
         final UsbInterface usbInterface = device.getInterface(0);
 
         for (int i = 0; i < device.getInterface(0).getEndpointCount(); i++) {

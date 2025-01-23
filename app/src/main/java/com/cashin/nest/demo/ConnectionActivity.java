@@ -1,6 +1,8 @@
 package com.cashin.nest.demo;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,10 +12,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cashin.nest.demo.data.constants.CommunicationConstants;
 import com.cashin.nest.demo.services.NestService.BluetoothCommunicationService;
 import com.cashin.nest.demo.services.NestService.NestService;
+import com.cashin.nest.demo.services.NestService.USBCommunicationService;
+import com.cashin.nest.demo.services.NestService.base.CommunicationService;
 import com.cashin.nest.demo.utils.AppHelper;
 import com.cashin.nest.demo.utils.HandleNestPurchaseHelper;
 import com.cashin.nest.demo.data.enums.PurchasePaymentMethod;
 import com.cashin.nest.demo.data.models.responses.PurchaseResponse;
+import com.cashin.nest.demo.utils.USBConnectHelper;
 import com.google.gson.Gson;
 
 import java.util.UUID;
@@ -29,13 +34,14 @@ public class ConnectionActivity extends AppCompatActivity {
         Button buttonSendData = findViewById(R.id.buttonSendData);
         textViewStatus = findViewById(R.id.textViewStatus);
         buttonSendData.setOnClickListener(v -> sendData());
-
+        CommunicationService service;
         BluetoothDevice device = getIntent().getParcelableExtra("BLUETOOTH_DEVICE");
         if (device == null) {
-            AppHelper.showToast(this, "No device selected");
-            finish();
+            service =new USBCommunicationService(USBConnectHelper.getInstance().getUsbManager(),USBConnectHelper.getInstance().getDevice(),USBConnectHelper.getInstance().getConnection());
+        }else{
+            service =new BluetoothCommunicationService(device);
         }
-        nestService = NestService.getInstance(new BluetoothCommunicationService(device), new HandleNestPurchaseHelper.NestPurchaseResponseHandlerCallBack() {
+        nestService = NestService.getInstance(service, new HandleNestPurchaseHelper.NestPurchaseResponseHandlerCallBack() {
             @Override
             public void onSuccess(PurchaseResponse purchaseResponse) {
 
