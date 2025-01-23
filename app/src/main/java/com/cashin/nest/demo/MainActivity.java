@@ -35,21 +35,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
     );
-    Button initiateUSBDevice;
-    Button buttonRefreshDevices;
-    Button requestBluetoothPermissions;
-    ListView listViewDevices;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // Initialize UI components
-        listViewDevices = findViewById(R.id.listViewDevices);
-        initiateUSBDevice = findViewById(R.id.initiateUSBDevice);
-        buttonRefreshDevices = findViewById(R.id.buttonRefreshDevices);
-        requestBluetoothPermissions = findViewById(R.id.requestBluetoothPermissions);
+        ListView listViewDevices = findViewById(R.id.listViewDevices);
+        Button initiateUSBDevice = findViewById(R.id.initiateUSBDevice);
+        Button buttonRefreshDevices = findViewById(R.id.buttonRefreshDevices);
+        Button requestBluetoothPermissions = findViewById(R.id.requestBluetoothPermissions);
 
         // Initialize Bluetooth helper with the launcher
         bluetoothHelper = new BluetoothConnectHelper(this, enableBluetoothLauncher);
